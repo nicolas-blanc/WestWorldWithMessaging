@@ -1,5 +1,6 @@
 #include <fstream>
 #include <time.h>
+#include <thread>
 
 #include "Locations.h"
 #include "Miner.h"
@@ -53,6 +54,7 @@ int main()
   //tidy up
   delete Bob;
   delete Elsa;
+  delete Child;
 
   //wait for a keypress before exiting
   PressAnyKeyToContinue();

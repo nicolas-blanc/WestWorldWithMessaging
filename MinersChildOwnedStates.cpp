@@ -39,10 +39,10 @@ bool ChildGlobalState::OnMessage(MinersChild * minerChild, const Telegram & msg)
 		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID()) << " at time: "
 			<< Clock->GetCurrentTime();
 
-		SetTextColor(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
 		cout << "\n" << GetNameOfEntity(minerChild->ID()) <<
-			": Hi Child. I work in the mine";
+			": Dad work at the mine, I want to make like him";
 
 		minerChild->IncreaseWantMakeLikeDad();
 	}
