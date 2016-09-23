@@ -49,6 +49,13 @@ void EnterMineAndDigForNugget::Execute(Miner* pMiner)
   //gp to the saloon for a whiskey.
   pMiner->AddToGoldCarried(1);
 
+  //let the child know I work
+  Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY, //time delay
+	  pMiner->ID(),        //ID of sender
+	  ent_Child,            //ID of recipient
+	  Msg_DadWork,   //the message
+	  NO_ADDITIONAL_INFO);
+
   pMiner->IncreaseFatigue();
 
   cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Pickin' up a nugget";

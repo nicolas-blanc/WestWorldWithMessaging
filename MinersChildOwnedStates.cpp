@@ -20,6 +20,41 @@ extern std::ofstream os;
 
 
 // ------------------------------------------------------------------------ //
+// Methods for ChildGlobalState
+ChildGlobalState * ChildGlobalState::Instance()
+{
+	static ChildGlobalState instance;
+
+	return &instance;
+}
+
+bool ChildGlobalState::OnMessage(MinersChild * minerChild, const Telegram & msg)
+{
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+	switch (msg.Msg)
+	{
+	case Msg_DadWork:
+	{
+		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID()) << " at time: "
+			<< Clock->GetCurrentTime();
+
+		SetTextColor(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
+		cout << "\n" << GetNameOfEntity(minerChild->ID()) <<
+			": Hi Child. I work in the mine";
+
+		minerChild->IncreaseWantMakeLikeDad();
+	}
+
+	return true;
+
+	}//end switch
+	return false;
+}
+
+
+// ------------------------------------------------------------------------ //
 // Methods for GoHome
 GoHome * GoHome::Instance()
 {
@@ -140,7 +175,7 @@ void AtHomeSleep::Execute(MinersChild * minerChild)
 	if (minerChild->NotFatigued())
 	{
 		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-			<< "ZZZZ...";
+			<< "ZZZZ... ";
 	}
 	else
 	{
@@ -222,26 +257,6 @@ void AtHomeEatStew::Exit(MinersChild * minerChild)
 
 bool AtHomeEatStew::OnMessage(MinersChild * minerChild, const Telegram & msg)
 {
-	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-
-	switch (msg.Msg)
-	{
-	case Msg_LittleStewReady:
-
-		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID())
-			<< " at time: " << Clock->GetCurrentTime();
-
-		SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": Okay Hun, ahm a comin'!";
-
-		minerChild->GetFSM()->ChangeState(AtHomeEatStew::Instance());
-
-		return true;
-
-	}//end switch
-
 	return false; //send message to global message handler
 }
 
@@ -396,7 +411,8 @@ void MakeLikeDad::Execute(MinersChild * minerChild)
 
 	minerChild->IncreaseThirsty();
 	minerChild->IncreaseFatigue();
-	minerChild->DecreaseWantPlay();
+	minerChild->IncreaseWantPlay();
+	minerChild->DecreaseWantMakeLikeDad();
 
 	if (minerChild->PocketsFull())
 	{
@@ -427,126 +443,3 @@ bool MakeLikeDad::OnMessage(MinersChild * agent, const Telegram & msg)
 {
 	return false;
 }
-
-
-
-//void GoHomeAndSleepTilRested::Enter(Miner* pMiner)
-//{
-//	if (pMiner->Location() != shack)
-//	{
-//		cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Walkin' home";
-//
-//		pMiner->ChangeLocation(shack);
-//
-//		//let the wife know I'm home
-//		Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY, //time delay
-//			pMiner->ID(),        //ID of sender
-//			ent_Elsa,            //ID of recipient
-//			Msg_HiHoneyImHome,   //the message
-//			NO_ADDITIONAL_INFO);
-//	}
-//}
-//
-//void GoHomeAndSleepTilRested::Execute(Miner* pMiner)
-//{
-//	//if miner is not fatigued start to dig for nuggets again.
-//	if (!pMiner->Fatigued())
-//	{
-//		cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": "
-//			<< "All mah fatigue has drained away. Time to find more gold! // Fatigue : " << pMi;
-//
-//		pMiner->GetFSM()->ChangeState(EnterMineAndDigForNugget::Instance());
-//	}
-//
-//	else
-//	{
-//		//sleep
-//		pMiner->DecreaseFatigue();
-//
-//		cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "ZZZZ... ";
-//	}
-//}
-//
-//void GoHomeAndSleepTilRested::Exit(Miner* pMiner)
-//{
-//}
-//
-//
-//bool GoHomeAndSleepTilRested::OnMessage(Miner* pMiner, const Telegram& msg)
-//{
-//	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-//
-//	switch (msg.Msg)
-//	{
-//	case Msg_StewReady:
-//
-//		cout << "\nMessage handled by " << GetNameOfEntity(pMiner->ID())
-//			<< " at time: " << Clock->GetCurrentTime();
-//
-//		SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
-//
-//		cout << "\n" << GetNameOfEntity(pMiner->ID())
-//			<< ": Okay Hun, ahm a comin'!";
-//
-//		pMiner->GetFSM()->ChangeState(EatStew::Instance());
-//
-//		return true;
-//
-//	}//end switch
-//
-//	return false; //send message to global message handler
-//}
-//
-//
-//
-//void EnterMineAndDigForNugget::Enter(Miner* pMiner)
-//{
-//	//if the miner is not already located at the goldmine, he must
-//	//change location to the gold mine
-//	if (pMiner->Location() != goldmine)
-//	{
-//		cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Walkin' to the goldmine";
-//
-//		pMiner->ChangeLocation(goldmine);
-//	}
-//}
-//
-//
-//void EnterMineAndDigForNugget::Execute(Miner* pMiner)
-//{
-//	//Now the miner is at the goldmine he digs for gold until he
-//	//is carrying in excess of MaxNuggets. If he gets thirsty during
-//	//his digging he packs up work for a while and changes state to
-//	//gp to the saloon for a whiskey.
-//	pMiner->AddToGoldCarried(1);
-//
-//	pMiner->IncreaseFatigue();
-//
-//	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Pickin' up a nugget";
-//
-//	//if enough gold mined, go and put it in the bank
-//	if (pMiner->PocketsFull())
-//	{
-//		pMiner->GetFSM()->ChangeState(VisitBankAndDepositGold::Instance());
-//	}
-//
-//	if (pMiner->Thirsty())
-//	{
-//		pMiner->GetFSM()->ChangeState(QuenchThirst::Instance());
-//	}
-//}
-//
-//
-//void EnterMineAndDigForNugget::Exit(Miner* pMiner)
-//{
-//	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": "
-//		<< "Ah'm leavin' the goldmine with mah pockets full o' sweet gold";
-//}
-//
-//
-//bool EnterMineAndDigForNugget::OnMessage(Miner* pMiner, const Telegram& msg)
-//{
-//	//send msg to global message handler
-//	return false;
-//}
-//

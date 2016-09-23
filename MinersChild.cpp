@@ -2,9 +2,7 @@
 
 void MinersChild::Update()
 {
-	SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
-
-	m_iFatigue += 1;
+	SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
 	m_pStateMachine->Update();
 }
@@ -23,7 +21,7 @@ void MinersChild::AddToStoneCarried(int val)
 
 bool MinersChild::Fatigued() const
 {
-	if (m_iFatigue >= ThirstLevel) { return true; }
+	if (m_iFatigue >= TirednessThresholdChild) { return true; }
 	return false;
 }
 
@@ -41,7 +39,7 @@ bool MinersChild::WhatWantTheChild() const
 
 bool MinersChild::Thirsty() const
 {
-	if (m_iThirsty >= ThirstLevel) { return true; }
+	if (m_iThirsty >= ThirstLevelChild) { return true; }
 	return false;
 }
 

@@ -216,7 +216,7 @@ bool CookStew::OnMessage(MinersWife* wife, const Telegram& msg)
            " at time: " << Clock->GetCurrentTime();
 
       SetTextColor(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
-      cout << "\n" << GetNameOfEntity(wife->ID()) << ": StewReady! Lets eat";
+      cout << "\n" << GetNameOfEntity(wife->ID()) << ": Stew Ready! Lets eat";
 
       //let hubby know the stew is ready
       Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY,
@@ -224,6 +224,13 @@ bool CookStew::OnMessage(MinersWife* wife, const Telegram& msg)
                                 ent_Miner_Bob,
                                 Msg_StewReady,
                                 NO_ADDITIONAL_INFO);
+
+	  //let child know the stew is ready
+	  Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY,
+								wife->ID(),
+								ent_Child,
+								Msg_LittleStewReady,
+								NO_ADDITIONAL_INFO);
 
       wife->SetCooking(false);
 

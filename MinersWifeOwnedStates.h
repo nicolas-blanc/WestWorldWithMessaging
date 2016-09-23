@@ -23,11 +23,11 @@ class WifesGlobalState : public State<MinersWife>
 {  
 private:
   
-  WifesGlobalState(){}
+	WifesGlobalState(){}
 
   //copy ctor and assignment should be private
-  WifesGlobalState(const WifesGlobalState&);
-  WifesGlobalState& operator=(const WifesGlobalState&);
+	WifesGlobalState(const WifesGlobalState&);
+	WifesGlobalState& operator=(const WifesGlobalState&);
  
 public:
 

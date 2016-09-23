@@ -16,6 +16,32 @@
 class MinersChild;
 struct Telegram;
 
+//------------------------------------------------------------------------
+class ChildGlobalState : public State<MinersChild>
+{
+private:
+
+	ChildGlobalState() {}
+
+	//copy ctor and assignment should be private
+	ChildGlobalState(const ChildGlobalState&);
+	ChildGlobalState& operator=(const ChildGlobalState&);
+
+public:
+
+	//this is a singleton
+	static ChildGlobalState* Instance();
+
+	virtual void Enter(MinersChild* minerChild) {}
+
+	virtual void Execute(MinersChild* minerChild) {}
+
+	virtual void Exit(MinersChild* minerChild) {}
+
+	virtual bool OnMessage(MinersChild* minerChild, const Telegram& msg);
+};
+
+//------------------------------------------------------------------------
 class GoHome : public State<MinersChild>
 {
 private:

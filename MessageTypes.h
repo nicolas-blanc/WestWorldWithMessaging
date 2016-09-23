@@ -9,6 +9,7 @@ enum message_type
   Msg_StewReady,
   Msg_HiMamImHome,
   Msg_LittleStewReady,
+  Msg_DadWork,
 };
 
 
@@ -31,6 +32,10 @@ inline std::string MsgToStr(int msg)
   case Msg_LittleStewReady:
 
 	  return "LittleStewReady";
+
+  case Msg_DadWork:
+
+	  return "DadWork";
 
   default:
 

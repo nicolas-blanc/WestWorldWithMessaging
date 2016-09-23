@@ -23,14 +23,12 @@ template <class entity_type> class State; //pre-fixed with "template <class enti
 
 struct Telegram;
 
-//the amount of gold a miner must have before he feels he can go home
-const int ComfortLevel = 5;
 //the amount of nuggets a miner can carry
 const int MaxStone = 3;
 //above this value a miner is sleepy
-const int TirednessThreshold = 3;
+const int TirednessThresholdChild = 3;
 //
-const int ThirstLevel = 3;
+const int ThirstLevelChild = 3;
 
 class MinersChild : public BaseGameEntity
 {
@@ -68,6 +66,8 @@ public:
 
 		m_pStateMachine->SetCurrentState(GoHome::Instance());
 
+		m_pStateMachine->SetGlobalState(ChildGlobalState::Instance());
+
 		/* NOTE, A GLOBAL STATE HAS NOT BEEN IMPLEMENTED FOR THE MINER */
 	};
 
@@ -91,9 +91,10 @@ public:
 	void          AddToStoneCarried(int val);
 	bool          PocketsFull()const { return m_iStoneCarried >= MaxStone; }
 
+	int			  GetFatigued()const { return m_iFatigue; }
 	bool          Fatigued()const;
 	bool		  NotFatigued() const;
-	void          DecreaseFatigue() { m_iFatigue -= 1; }
+	void          DecreaseFatigue() { m_iFatigue -= 2; }
 	void          IncreaseFatigue() { m_iFatigue += 1; }
 
 	bool		  WhatWantTheChild()const;
