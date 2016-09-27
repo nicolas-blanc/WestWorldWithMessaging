@@ -4,6 +4,7 @@
 
 #include "Locations.h"
 #include "Miner.h"
+#include "Drunk.h"
 #include "MinersWife.h"
 #include "MinersChild.h"
 #include "EntityManager.h"
@@ -26,25 +27,26 @@ int main()
 
   //create a miner
   Miner* Bob = new Miner(ent_Miner_Bob);
-
-  //create his wife
   MinersWife* Elsa = new MinersWife(ent_Elsa);
+ 
+  //create his wife
 
   //Create the child
   MinersChild* Child = new MinersChild(ent_Child);
+  Drunk* drunk = new Drunk(ent_Drunk);
 
   //register them with the entity manager
   EntityMgr->RegisterEntity(Bob);
   EntityMgr->RegisterEntity(Elsa);
   EntityMgr->RegisterEntity(Child);
-
+  EntityMgr->RegisterEntity(drunk);
   //run Bob and Elsa through a few Update calls
   for (int i=0; i<30; ++i)
   { 
     Bob->Update();
     Elsa->Update();
 	Child->Update();
-
+	drunk->Update();
     //dispatch any delayed messages
     Dispatch->DispatchDelayedMessages();
 
@@ -55,6 +57,7 @@ int main()
   delete Bob;
   delete Elsa;
   delete Child;
+  delete drunk;
 
   //wait for a keypress before exiting
   PressAnyKeyToContinue();

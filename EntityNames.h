@@ -9,7 +9,9 @@ enum
 
   ent_Elsa,
 
-  ent_Child
+  ent_Child,
+
+  ent_Drunk
 };
 
 inline std::string GetNameOfEntity(int n)
@@ -27,6 +29,9 @@ inline std::string GetNameOfEntity(int n)
   case ent_Child:
 
 	  return "Child";
+
+  case ent_Drunk:
+	  return "Drunk";
 
   default:
 

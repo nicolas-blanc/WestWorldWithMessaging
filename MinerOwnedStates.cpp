@@ -235,8 +235,9 @@ void QuenchThirst::Enter(Miner* pMiner)
   if (pMiner->Location() != saloon)
   {    
     pMiner->ChangeLocation(saloon);
-
-    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Boy, ah sure is thusty! Walking to the saloon";
+	Dispatch->DispatchMessageA(0, pMiner->ID(), ent_Drunk, Msg_MinerAtSaloon, NO_ADDITIONAL_INFO);
+	Dispatch->DispatchMessageA(1, pMiner->ID(), pMiner->ID(), Msg_MinerAtSaloon, NO_ADDITIONAL_INFO);
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Boy, ah sure is thusty! Walking to the saloon";
   }
 }
 
@@ -246,7 +247,7 @@ void QuenchThirst::Execute(Miner* pMiner)
 
   cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "That's mighty fine sippin' liquer";
 
-  pMiner->GetFSM()->ChangeState(EnterMineAndDigForNugget::Instance());  
+
 }
 
 
@@ -258,8 +259,15 @@ void QuenchThirst::Exit(Miner* pMiner)
 
 bool QuenchThirst::OnMessage(Miner* pMiner, const Telegram& msg)
 {
-  //send msg to global message handler
-  return false;
+	switch (msg.Msg){
+	case Msg_DrunkStartFight:
+		pMiner->GetFSM()->ChangeState(Fight::Instance());
+		break;
+	case Msg_MinerAtSaloon:
+		pMiner->GetFSM()->ChangeState(EnterMineAndDigForNugget::Instance());
+		break;
+	}
+	return true;
 }
 
 //------------------------------------------------------------------------EatStew
@@ -297,3 +305,39 @@ bool EatStew::OnMessage(Miner* pMiner, const Telegram& msg)
 }
 
 
+Fight* Fight::Instance()
+{
+	static Fight instance;
+
+	return &instance;
+}
+
+
+void Fight::Enter(Miner* pMiner)
+{
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Woahh what'you want men ? I'm just there to take som whiskey!";
+}
+
+void Fight::Execute(Miner* pMiner)
+{
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Pleas Calm'down!";
+
+
+}
+
+void Fight::Exit(Miner* pMiner)
+{
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Wow this guys is crazy. lets go back to what I was doin'";
+}
+
+
+bool Fight::OnMessage(Miner* pMiner, const Telegram& msg)
+{
+	switch (msg.Msg)
+	{
+	case Msg_DrunkStopFight:
+		pMiner->GetFSM()->RevertToPreviousState();
+		break;
+	}
+	return true;
+}

@@ -10,6 +10,11 @@ enum message_type
   Msg_HiMamImHome,
   Msg_LittleStewReady,
   Msg_DadWork,
+  Msg_BeerReady,
+  Msg_PretzelReady,
+  Msg_MinerAtSaloon,
+  Msg_DrunkStartFight,
+  Msg_DrunkStopFight
 };
 
 
@@ -36,6 +41,17 @@ inline std::string MsgToStr(int msg)
   case Msg_DadWork:
 
 	  return "DadWork";
+  case Msg_BeerReady:
+
+	  return "BeerReady";
+  case Msg_PretzelReady:
+	  return "PretzelReady";
+  case Msg_DrunkStartFight:
+	  return "DrunkStartFight";
+  case Msg_DrunkStopFight:
+	  return "DrunkStopFight";
+  case Msg_MinerAtSaloon:
+	  return "MinerAtSaloon";
 
   default:
 
