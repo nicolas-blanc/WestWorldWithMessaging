@@ -7,6 +7,7 @@
 #include "MessageTypes.h"
 #include "Time/CrudeTimer.h"
 #include "EntityNames.h"
+#include "DisplayMessageThread.h"
 
 #include <iostream>
 using std::cout;
@@ -30,19 +31,17 @@ ChildGlobalState * ChildGlobalState::Instance()
 
 bool ChildGlobalState::OnMessage(MinersChild * minerChild, const Telegram & msg)
 {
-	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-
 	switch (msg.Msg)
 	{
 	case Msg_DadWork:
 	{
 		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID()) << " at time: "
 			<< Clock->GetCurrentTime();
+		DisplayMessageThread::displayMessage(minerChild->ID());
 
-		SetTextColor(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-
-		cout << "\n" << GetNameOfEntity(minerChild->ID()) <<
-			": Hi Child. I work in the mine";
+		// 		cout << "\n" << GetNameOfEntity(minerChild->ID()) <<
+		// 			": My dad work in the mine";
+		DisplayMessageThread::display(": My dad work in the mine", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->IncreaseWantMakeLikeDad();
 	}
@@ -67,7 +66,8 @@ void GoHome::Enter(MinersChild * pminerChild)
 {
 	if (pminerChild->Location() != shack)
 	{
-		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": " << "I'm going to home";
+// 		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": " << "I'm going to home";
+		DisplayMessageThread::display("I'm going to home", pminerChild->ID(), FOREGROUND_BLUE);
 
 		pminerChild->ChangeLocation(shack);
 	}
@@ -86,8 +86,10 @@ void GoHome::Execute(MinersChild * pminerChild)
 
 	if (pminerChild->StoneCarried())
 	{
-		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
-			<< "I drop all my stone in the garden";
+// 		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
+// 			<< "I drop all my stone in the garden";
+		DisplayMessageThread::display("I drop all my stone in the garden", pminerChild->ID(), FOREGROUND_BLUE);
+
 		pminerChild->SetStoneCarried(0);
 	}
 
@@ -97,27 +99,32 @@ void GoHome::Execute(MinersChild * pminerChild)
 	}
 	else if (pminerChild->Thirsty())
 	{
-		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
-			<< "Mam, I want water !";
+// 		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
+// 			<< "Mam, I want water !";
+		DisplayMessageThread::display("Mam, I want water !", pminerChild->ID(), FOREGROUND_BLUE);
 
 		pminerChild->GetFSM()->ChangeState(AtHomeDrink::Instance());
 	}
 	else
 	{
-		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
-			<< "I want to go out";
+// 		cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
+// 			<< "I want to go out";
+		DisplayMessageThread::display("I want to go out", pminerChild->ID(), FOREGROUND_BLUE);
+
 		if (pminerChild->WhatWantTheChild())
 		{
-			cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
-				<< "I want to make like Dad, i'll meet them";
+// 			cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
+// 				<< "I want to make like Dad, i'll meet them";
+			DisplayMessageThread::display("I want to make like Dad, i'll meet them", pminerChild->ID(), FOREGROUND_BLUE);
 
 			pminerChild->GetFSM()->ChangeState(MakeLikeDad::Instance());
 		}
 		else
 		{
-			cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
-				<< "i'll go to play with my friends !";
-			
+// 			cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
+// 				<< "i'll go to play with my friends !";
+			DisplayMessageThread::display("i'll go to play with my friends !", pminerChild->ID(), FOREGROUND_BLUE);
+
 			pminerChild->GetFSM()->ChangeState(PlayWithFriend::Instance());
 		}
 	}
@@ -129,26 +136,24 @@ void GoHome::Exit(MinersChild * pminerChild)
 
 bool GoHome::OnMessage(MinersChild * pminerChild, const Telegram& msg)
 {
-	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	
 	switch (msg.Msg)
 	{
 	case Msg_LittleStewReady:
-	
-		cout << "\nMessage handled by " << GetNameOfEntity(pminerChild->ID())
-			<< " at time: " << Clock->GetCurrentTime();
-	
-		SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	
-		cout << "\n" << GetNameOfEntity(pminerChild->ID())
-			<< ": Okay Hun, ahm a comin'!";
-	
+
+// 		cout << "\nMessage handled by " << GetNameOfEntity(pminerChild->ID())
+// 			<< " at time: " << Clock->GetCurrentTime();
+		DisplayMessageThread::displayMessage(pminerChild->ID());
+
+// 		cout << "\n" << GetNameOfEntity(pminerChild->ID())
+// 			<< ": Okay Hun, ahm a comin'!";
+		DisplayMessageThread::display(": Okay Hun, ahm a comin'!", pminerChild->ID(), FOREGROUND_BLUE);
+
 		pminerChild->GetFSM()->ChangeState(AtHomeEatStew::Instance());
-	
+
 		return true;
-	
+
 	}//end switch
-	
+
 	return false; //send message to global message handler
 }
 
@@ -164,8 +169,10 @@ AtHomeSleep * AtHomeSleep::Instance()
 
 void AtHomeSleep::Enter(MinersChild * pminerChild)
 {
-	cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
-		<< "I'm tired, go to bed, ZZZZ...";
+// 	cout << "\n" << GetNameOfEntity(pminerChild->ID()) << ": "
+// 		<< "I'm tired, go to bed, ZZZZ...";
+	DisplayMessageThread::display("I'm tired, go to bed, ZZZZ...", pminerChild->ID(), FOREGROUND_BLUE);
+
 }
 
 void AtHomeSleep::Execute(MinersChild * minerChild)
@@ -174,25 +181,29 @@ void AtHomeSleep::Execute(MinersChild * minerChild)
 
 	if (minerChild->NotFatigued())
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-			<< "ZZZZ... ";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 			<< "ZZZZ... ";
+		DisplayMessageThread::display("ZZZZ... ", minerChild->ID(), FOREGROUND_BLUE);
 	}
 	else
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-			<< "I want to go out";
-		
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 			<< "I want to go out";
+		DisplayMessageThread::display("I want to go out", minerChild->ID(), FOREGROUND_BLUE);
+
 		if (minerChild->WhatWantTheChild())
 		{
-			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-				<< "I want to make like Dad, i'll meet them";
+// 			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 				<< "I want to make like Dad, i'll meet them";
+			DisplayMessageThread::display("I want to make like Dad, i'll meet them", minerChild->ID(), FOREGROUND_BLUE);
 
 			minerChild->GetFSM()->ChangeState(MakeLikeDad::Instance());
 		}
 		else
 		{
-			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-				<< "i'll go to play with my friends !";
+// 			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 				<< "i'll go to play with my friends !";
+			DisplayMessageThread::display("i'll go to play with my friends !", minerChild->ID(), FOREGROUND_BLUE);
 
 			minerChild->GetFSM()->ChangeState(PlayWithFriend::Instance());
 		}
@@ -205,19 +216,17 @@ void AtHomeSleep::Exit(MinersChild * minerChild)
 
 bool AtHomeSleep::OnMessage(MinersChild * minerChild, const Telegram & msg)
 {
-	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-
 	switch (msg.Msg)
 	{
 	case Msg_LittleStewReady:
 
-		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID())
-			<< " at time: " << Clock->GetCurrentTime();
+// 		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID())
+// 			<< " at time: " << Clock->GetCurrentTime();
+		DisplayMessageThread::displayMessage(minerChild->ID());
 
-		SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": Okay Hun, ahm a comin'!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": Okay Hun, ahm a comin'!";
+		DisplayMessageThread::display(": Okay Hun, ahm a comin'!", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->GetFSM()->ChangeState(AtHomeEatStew::Instance());
 
@@ -240,19 +249,22 @@ AtHomeEatStew * AtHomeEatStew::Instance()
 
 void AtHomeEatStew::Enter(MinersChild * minerChild)
 {
-	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Smells Reaaal goood Mam!";
+// 	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Smells Reaaal goood Mam!";
+	DisplayMessageThread::display("Smells Reaaal goood Mam!", minerChild->ID(), FOREGROUND_BLUE);
 }
 
 void AtHomeEatStew::Execute(MinersChild * minerChild)
 {
-	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Tastes real good too!";
+// 	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Tastes real good too!";
+	DisplayMessageThread::display("Tastes real good too!", minerChild->ID(), FOREGROUND_BLUE);
 
 	minerChild->GetFSM()->RevertToPreviousState();
 }
 
 void AtHomeEatStew::Exit(MinersChild * minerChild)
 {
-	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Thankya Mam.";
+// 	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Thankya Mam.";
+	DisplayMessageThread::display("Thankya Mam.", minerChild->ID(), FOREGROUND_BLUE);
 }
 
 bool AtHomeEatStew::OnMessage(MinersChild * minerChild, const Telegram & msg)
@@ -272,8 +284,9 @@ AtHomeDrink * AtHomeDrink::Instance()
 
 void AtHomeDrink::Enter(MinersChild * minerChild)
 {
-	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-		<< "I'm thirsty, time to drink, GlouGlou...";
+// 	cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 		<< "I'm thirsty, time to drink, GlouGlou...";
+	DisplayMessageThread::display("I'm thirsty, time to drink, GlouGlou...", minerChild->ID(), FOREGROUND_BLUE);
 }
 
 void AtHomeDrink::Execute(MinersChild * minerChild)
@@ -282,25 +295,29 @@ void AtHomeDrink::Execute(MinersChild * minerChild)
 
 	if (minerChild->NotThirsty())
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-			<< "GlouGlou...";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 			<< "GlouGlou...";
+		DisplayMessageThread::display("GlouGlou...", minerChild->ID(), FOREGROUND_BLUE);
 	}
 	else
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-			<< "I want to go out";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 			<< "I want to go out";
+		DisplayMessageThread::display("I want to go out", minerChild->ID(), FOREGROUND_BLUE);
 
 		if (minerChild->WhatWantTheChild())
 		{
-			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-				<< "I want to make like Dad, i'll meet them";
+// 			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 				<< "I want to make like Dad, i'll meet them";
+			DisplayMessageThread::display("I want to make like Dad, i'll meet them", minerChild->ID(), FOREGROUND_BLUE);
 
 			minerChild->GetFSM()->ChangeState(MakeLikeDad::Instance());
 		}
 		else
 		{
-			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
-				<< "i'll go to play with my friends !";
+// 			cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": "
+// 				<< "i'll go to play with my friends !";
+			DisplayMessageThread::display("I'll go to play with my friends !", minerChild->ID(), FOREGROUND_BLUE);
 
 			minerChild->GetFSM()->ChangeState(PlayWithFriend::Instance());
 		}
@@ -313,19 +330,17 @@ void AtHomeDrink::Exit(MinersChild * minerChild)
 
 bool AtHomeDrink::OnMessage(MinersChild * minerChild, const Telegram & msg)
 {
-	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-
 	switch (msg.Msg)
 	{
 	case Msg_LittleStewReady:
 
-		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID())
-			<< " at time: " << Clock->GetCurrentTime();
+// 		cout << "\nMessage handled by " << GetNameOfEntity(minerChild->ID())
+// 			<< " at time: " << Clock->GetCurrentTime();
+		DisplayMessageThread::displayMessage(minerChild->ID());
 
-		SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": Okay Hun, ahm a comin'!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": " << "Okay Hun, ahm a comin'!";
+		DisplayMessageThread::display("Okay Hun, ahm a comin'!", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->GetFSM()->ChangeState(AtHomeEatStew::Instance());
 
@@ -348,8 +363,9 @@ PlayWithFriend * PlayWithFriend::Instance()
 
 void PlayWithFriend::Enter(MinersChild * minerChild)
 {
-	cout << "\n" << GetNameOfEntity(minerChild->ID())
-		<< ": Wait to me friends, I'll come!";
+// 	cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 		<< ": " << "Wait to me friends, I'll come!";
+	DisplayMessageThread::display("Wait to me friends, I'll come!", minerChild->ID(), FOREGROUND_BLUE);
 
 	minerChild->ChangeLocation(playZone);
 }
@@ -361,15 +377,17 @@ void PlayWithFriend::Execute(MinersChild * minerChild)
 	minerChild->DecreaseWantPlay();
 
 	if (minerChild->Thirsty()) {
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": I'm Thirsty, I'll go to home!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": I'm Thirsty, I'll go to home!";
+		DisplayMessageThread::display("I'm Thirsty, I'll go to home!", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->GetFSM()->ChangeState(GoHome::Instance());
 	}
 	else
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": I play with my friends in the play zone!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": I play with my friends in the play zone!";
+		DisplayMessageThread::display("I play with my friends in the play zone!", minerChild->ID(), FOREGROUND_BLUE);
 	}
 }
 
@@ -396,7 +414,8 @@ void MakeLikeDad::Enter(MinersChild * minerChild)
 {
 	if (minerChild->Location() != goldmine)
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Walkin' to the goldmine";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID()) << ": " << "Walkin' to the goldmine";
+		DisplayMessageThread::display("Walkin' to the goldmine", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->ChangeLocation(goldmine);
 	}
@@ -406,8 +425,9 @@ void MakeLikeDad::Execute(MinersChild * minerChild)
 {
 	minerChild->AddToStoneCarried(1);
 
-	cout << "\n" << GetNameOfEntity(minerChild->ID())
-		<< ": Pickin' up a little stone";
+// 	cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 		<< ": Pickin' up a little stone";
+	DisplayMessageThread::display("Pickin' up a little stone", minerChild->ID(), FOREGROUND_BLUE);
 
 	minerChild->IncreaseThirsty();
 	minerChild->IncreaseFatigue();
@@ -416,22 +436,25 @@ void MakeLikeDad::Execute(MinersChild * minerChild)
 
 	if (minerChild->PocketsFull())
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": I'm full of stone, I'll go to home!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": I'm full of stone, I'll go to home!";
+		DisplayMessageThread::display("I'm full of stone, I'll go to home!", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->GetFSM()->ChangeState(GoHome::Instance());
 	}
 	else if (minerChild->Thirsty() || minerChild->Fatigued())
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": I'm finishing here, I'll go to home!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": I'm finishing here, I'll go to home!";
+		DisplayMessageThread::display("I'm finishing here, I'll go to home!", minerChild->ID(), FOREGROUND_BLUE);
 
 		minerChild->GetFSM()->ChangeState(GoHome::Instance());
 	}
 	else
 	{
-		cout << "\n" << GetNameOfEntity(minerChild->ID())
-			<< ": I make like Dad, I search for stone!";
+// 		cout << "\n" << GetNameOfEntity(minerChild->ID())
+// 			<< ": I make like Dad, I search for stone!";
+		DisplayMessageThread::display("I make like Dad, I search for stone!", minerChild->ID(), FOREGROUND_BLUE);
 	}
 }
 
