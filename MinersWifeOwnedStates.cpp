@@ -54,6 +54,8 @@ bool WifesGlobalState::OnMessage(MinersWife* wife, const Telegram& msg)
 		DisplayMessageThread::display(": Hi honey. Let me make you some of mah fine country stew", wife->ID(), FOREGROUND_GREEN);
 
 		wife->GetFSM()->ChangeState(CookStew::Instance());
+		
+		return true;
 	}
 	case Msg_HiMamImHome:
 	{
@@ -66,12 +68,9 @@ bool WifesGlobalState::OnMessage(MinersWife* wife, const Telegram& msg)
 		DisplayMessageThread::display(": Hi my child. Let me make you a little some of mah fine country stew", wife->ID(), FOREGROUND_GREEN);
 
 		wife->GetFSM()->ChangeState(CookStew::Instance());
-
+		
+		return true;
 	}
-
-
-	return true;
-
 	}//end switch
 
 	return false;
