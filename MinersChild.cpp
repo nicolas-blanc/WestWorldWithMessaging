@@ -1,9 +1,35 @@
 #include "MinersChild.h"
+#include "DisplayMessageThread.h"
+#include <string>
+
+uint32_t MinersChild::threadFunc(const int number_update, MinersChild * miner)
+{
+	std::cout << "Thread child Miner";
+
+	for (int i = 0; i < number_update; i++)
+	{
+		while (miner->getStep()) {}
+
+		DisplayMessageThread::display("Number of turn : " + std::to_string(i), miner->ID(), FOREGROUND_BLUE);
+		miner->Update();
+
+		miner->setStep(TRUE);
+	}
+
+	std::cout << "END Thread child Miner";
+	miner->stop();
+
+	return 0;
+}
+
+void MinersChild::start(const int number_udpate)
+{
+	m_thread = std::thread(threadFunc, number_udpate, this);
+
+}
 
 void MinersChild::Update()
 {
-	SetTextColor(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-
 	m_pStateMachine->Update();
 }
 

@@ -12,6 +12,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
+#include <thread>
 
 #include "BaseGameEntity.h"
 #include "Locations.h"
@@ -49,7 +50,14 @@ private:
 
 	int					  m_iWantPlay;
 
-	int					 m_iWantMakeLikeDad;
+	int					  m_iWantMakeLikeDad;
+
+	bool				  m_actif = TRUE;
+	bool				  m_step = TRUE;
+
+	std::thread m_thread;
+
+	static uint32_t threadFunc(const int number_update, MinersChild * miner);
 
 public:
 	MinersChild(int id) :m_Location(shack),
@@ -73,6 +81,8 @@ public:
 
 	~MinersChild() { delete m_pStateMachine; };
 
+	void start(const int number_update);
+
 	//this must be implemented
 	void Update();
 
@@ -85,6 +95,13 @@ public:
 	//-------------------------------------------------------------accessors
 	location_type Location()const { return m_Location; }
 	void          ChangeLocation(location_type loc) { m_Location = loc; }
+
+	bool		  const isActif()const { return m_actif; }
+	void		  stop() { m_actif = FALSE; }
+	void		  join() { m_thread.join(); }
+
+	bool		  const getStep()const { return m_step; }
+	void		  setStep(bool b) { m_step = b; }
 
 	bool          StoneCarried()const { return m_iStoneCarried > 0; }
 	void          SetStoneCarried(int val) { m_iStoneCarried = val; }

@@ -132,6 +132,7 @@
     <ClCompile Include="BaseGameEntity.cpp" />
     <ClCompile Include="Drunk.cpp" />
     <ClCompile Include="DrunkOwnedStates.cpp" />
+    <ClCompile Include="DisplayMessageThread.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageDispatcher.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="..\..\Common\Time\CrudeTimer.h" />
     <ClInclude Include="..\..\Common\utils.h" />
     <ClInclude Include="BaseGameEntity.h" />
+    <ClInclude Include="DisplayMessageThread.h" />
     <ClInclude Include="Drunk.h" />
     <ClInclude Include="DrunkOwnedStates.h" />
     <ClInclude Include="EntityManager.h" />
