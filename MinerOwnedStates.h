@@ -171,15 +171,12 @@ public:
 
   virtual bool OnMessage(Miner* agent, const Telegram& msg);
 };
+
 class Fight : public State<Miner>
 {
 private:
-
-
 	//copy ctor and assignment should be private
 	Fight(){};
-
-
 public:
 
 	//this is a singleton

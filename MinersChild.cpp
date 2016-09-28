@@ -4,7 +4,7 @@
 
 uint32_t MinersChild::threadFunc(const int number_update, MinersChild * miner)
 {
-	std::cout << "Thread child Miner";
+	DisplayMessageThread::display("Create Thread", miner->ID(), FOREGROUND_BLUE);
 
 	for (int i = 0; i < number_update; i++)
 	{
@@ -16,7 +16,7 @@ uint32_t MinersChild::threadFunc(const int number_update, MinersChild * miner)
 		miner->setStep(TRUE);
 	}
 
-	std::cout << "END Thread child Miner";
+	DisplayMessageThread::display("End Thread", miner->ID(), FOREGROUND_BLUE);
 	miner->stop();
 
 	return 0;

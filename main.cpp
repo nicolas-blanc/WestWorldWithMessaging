@@ -11,86 +11,91 @@
 #include "misc/ConsoleUtils.h"
 #include "EntityNames.h"
 
-#define NUMBER_OF_UPDATE 30
+#define NUMBER_OF_UPDATE 20
 
 std::ofstream os;
 
 int main()
 {
-//define this to send output to a text file (see locations.h)
+	//define this to send output to a text file (see locations.h)
 #ifdef TEXTOUTPUT
-  os.open("output.txt");
+	os.open("output.txt");
 #endif
 
-  //seed random number generator
-  srand((unsigned) time(NULL));
+	//seed random number generator
+	srand((unsigned)time(NULL));
 
-  //create a miner
-  Miner* Bob = new Miner(ent_Miner_Bob);
+	//create a miner
+	Miner* Bob = new Miner(ent_Miner_Bob);
 
-  //create his wife
-  MinersWife* Elsa = new MinersWife(ent_Elsa);
+	//create his wife
+	MinersWife* Elsa = new MinersWife(ent_Elsa);
 
-  //Create the child
-  MinersChild* Child = new MinersChild(ent_Child);
-  Drunk* drunk = new Drunk(ent_Drunk);
+	//Create the child
+	MinersChild* Child = new MinersChild(ent_Child);
 
-  //register them with the entity manager
-  EntityMgr->RegisterEntity(Bob);
-  EntityMgr->RegisterEntity(Elsa);
-  EntityMgr->RegisterEntity(Child);
-  EntityMgr->RegisterEntity(drunk);
+	//Create the drunk
+	Drunk* drunk = new Drunk(ent_Drunk);
 
-  Bob->start(NUMBER_OF_UPDATE);
-  Elsa->start(NUMBER_OF_UPDATE);
-  Child->start(NUMBER_OF_UPDATE);
+	//register them with the entity manager
+	EntityMgr->RegisterEntity(Bob);
+	EntityMgr->RegisterEntity(Elsa);
+	EntityMgr->RegisterEntity(Child);
+	EntityMgr->RegisterEntity(drunk);
 
-  while (Bob->isActif() || Elsa->isActif() || Child->isActif())
-  {
+	Bob->start(NUMBER_OF_UPDATE);
+	Elsa->start(NUMBER_OF_UPDATE);
+	Child->start(NUMBER_OF_UPDATE);
+	drunk->start(NUMBER_OF_UPDATE);
 
-	  if (Bob->getStep() && Elsa->getStep() && Child->getStep())
-	  {
+	while (Bob->isActif() || Elsa->isActif() || Child->isActif() || drunk->isActif())
+	{
 
-		  Bob->setStep(FALSE);
-		  Elsa->setStep(FALSE);
-		  Child->setStep(FALSE);
+		if (Bob->getStep() && Elsa->getStep() && Child->getStep() && drunk->getStep())
+		{
 
-		  //dispatch any delayed messages
-	      Dispatch->DispatchDelayedMessages();
+			Bob->setStep(FALSE);
+			Elsa->setStep(FALSE);
+			Child->setStep(FALSE);
+			drunk->setStep(FALSE);
 
-		  Sleep(800)
-	  }
+			//dispatch any delayed messages
+			Dispatch->DispatchDelayedMessages();
 
-  }
+			Sleep(800);
+		}
 
-  Bob->join();
-  Elsa->join();
-  Child->join();
+	}
 
-  //run Bob and Elsa through a few Update calls
- // for (int i=0; i<NUMBER_OF_UPDATE; ++i)
- // { 
- //   Bob->Update();
- //   Elsa->Update();
-	//Child->Update();
+	Bob->join();
+	Elsa->join();
+	Child->join();
+	drunk->join();
 
- //   //dispatch any delayed messages
- //   Dispatch->DispatchDelayedMessages();
+	//run Bob and Elsa through a few Update calls
+   // for (int i=0; i<NUMBER_OF_UPDATE; ++i)
+   // { 
+   //   Bob->Update();
+   //   Elsa->Update();
+	  //Child->Update();
 
- //   Sleep(800);
- // }
+   //   //dispatch any delayed messages
+   //   Dispatch->DispatchDelayedMessages();
 
-  //tidy up
-  delete Bob;
-  delete Elsa;
-  delete Child;
-  delete drunk;
+   //   Sleep(800);
+   // }
 
-  //wait for a keypress before exiting
-  PressAnyKeyToContinue();
+	//tidy up
+	delete Bob;
+	delete Elsa;
+	delete Child;
+	delete drunk;
+
+	//wait for a keypress before exiting
+	PressAnyKeyToContinue();
 
 
-  return 0;
+	return 0;
 }
 
 

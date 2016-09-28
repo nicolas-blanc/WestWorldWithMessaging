@@ -249,7 +249,7 @@ void QuenchThirst::Enter(Miner* pMiner)
 	Dispatch->DispatchMessageA(0, pMiner->ID(), ent_Drunk, Msg_MinerAtSaloon, NO_ADDITIONAL_INFO);
 	Dispatch->DispatchMessageA(1, pMiner->ID(), pMiner->ID(), Msg_MinerAtSaloon, NO_ADDITIONAL_INFO);
 
-*// cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Boy, ah sure is thusty! Walking to the saloon";
+// cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Boy, ah sure is thusty! Walking to the saloon";
 	DisplayMessageThread::display("Boy, ah sure is thusty! Walking to the saloon", pMiner->ID(), FOREGROUND_RED);
   }
 }
@@ -333,19 +333,21 @@ Fight* Fight::Instance()
 
 void Fight::Enter(Miner* pMiner)
 {
-	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Woahh what'you want men ? I'm just there to take som whiskey!";
+// 	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Woahh what'you want men ? I'm just there to take som whiskey!";
+	DisplayMessageThread::display("Woahh what'you want men ? I'm just there to take som whiskey!", pMiner->ID(), FOREGROUND_RED);
 }
 
 void Fight::Execute(Miner* pMiner)
 {
-	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Pleas Calm'down!";
-
+// 	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Pleas Calm'down!";
+	DisplayMessageThread::display("Pleas Calm'down!", pMiner->ID(), FOREGROUND_RED);
 
 }
 
 void Fight::Exit(Miner* pMiner)
 {
-	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Wow this guys is crazy. lets go back to what I was doin'";
+// 	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Wow this guys is crazy. lets go back to what I was doin'";
+	DisplayMessageThread::display("Wow this guys is crazy. lets go back to what I was doin'", pMiner->ID(), FOREGROUND_RED);
 }
 
 

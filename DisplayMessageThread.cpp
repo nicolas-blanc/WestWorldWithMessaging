@@ -1,7 +1,7 @@
 #include "DisplayMessageThread.h"
 #include "EntityNames.h"
 #include <iostream>
-#include "..\..\Common\misc\ConsoleUtils.h"
+#include "misc\ConsoleUtils.h"
 #include "Time\CrudeTimer.h"
 
 #include <string>

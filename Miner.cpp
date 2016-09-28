@@ -9,7 +9,7 @@ bool Miner::HandleMessage(const Telegram& msg)
 
 uint32_t Miner::threadFunc(const int number_update, Miner * miner)
 {
-	std::cout << "Thread Miner";
+	DisplayMessageThread::display("Create Thread", miner->ID(), FOREGROUND_RED);
 
 	for (int i = 0; i < number_update; i++)
 	{
@@ -21,7 +21,8 @@ uint32_t Miner::threadFunc(const int number_update, Miner * miner)
 		miner->setStep(TRUE);
 	}
 
-	std::cout << "END Thread Miner";
+	DisplayMessageThread::display("End Thread", miner->ID(), FOREGROUND_RED);
+
 	miner->stop();
 
 	return 0;
@@ -30,7 +31,6 @@ uint32_t Miner::threadFunc(const int number_update, Miner * miner)
 void Miner::start(const int number_udpate)
 {
 	m_thread = std::thread(threadFunc, number_udpate, this);
-
 }
 
 void Miner::Update()
