@@ -55,6 +55,8 @@ int main()
 
 		  //dispatch any delayed messages
 	      Dispatch->DispatchDelayedMessages();
+
+		  Sleep(800)
 	  }
 
   }
