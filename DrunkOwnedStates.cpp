@@ -48,14 +48,7 @@ void DrinkABeer::Exit(Drunk* drunk) {
 	DisplayMessageThread::display("Oh My beer is empty Now !", drunk->ID(), FOREGROUND_GREEN);
 }
 bool DrinkABeer::OnMessage(Drunk* drunk, const Telegram& msg) {
-	switch (msg.Msg) {
-	case Msg_MinerAtSaloon:
-		DisplayMessageThread::displayMessage(drunk->ID());
-
-		drunk->GetFSM()->ChangeState(DrunkFight::Instance());
-		break;
-	};
-	return true;
+	return false;
 }
 
 OrderBeer* OrderBeer::Instance() {
@@ -92,11 +85,7 @@ bool OrderBeer::OnMessage(Drunk* drunk, const Telegram& msg) {
 		drunk->GetFSM()->ChangeState(DrinkABeer::Instance());
 		break;
 
-	case Msg_MinerAtSaloon:
-		DisplayMessageThread::displayMessage(drunk->ID());
-
-		drunk->GetFSM()->ChangeState(DrunkFight::Instance());
-		break;
+	
 	}
 	return true;
 }
@@ -134,11 +123,7 @@ bool OrderPretzel::OnMessage(Drunk* drunk, const Telegram& msg) {
 		drunk->GetFSM()->ChangeState(EatSomePretzel::Instance());
 		break;
 
-	case Msg_MinerAtSaloon:
-		DisplayMessageThread::displayMessage(drunk->ID());
-
-		drunk->GetFSM()->ChangeState(DrunkFight::Instance());
-		break;
+	
 	}
 	return true;
 }
@@ -202,14 +187,8 @@ void EatSomePretzel::Exit(Drunk* drunk) {
 }
 
 bool EatSomePretzel::OnMessage(Drunk* drunk, const Telegram& msg) {
-	switch (msg.Msg) {
-	case Msg_MinerAtSaloon:
-		DisplayMessageThread::displayMessage(drunk->ID());
-
-		drunk->GetFSM()->ChangeState(DrunkFight::Instance());
-		break;
-	};
-	return true;
+	
+	return false;
 }
 
 SleepAtSaloon* SleepAtSaloon::Instance() {
@@ -243,5 +222,32 @@ void SleepAtSaloon::Exit(Drunk* drunk) {
 
 bool SleepAtSaloon::OnMessage(Drunk* drunk, const Telegram& msg) {
 	return false;
+}
+
+DrunkGlobalState* DrunkGlobalState::Instance() {
+	static DrunkGlobalState instance;
+
+	return &instance;
+}
+
+void DrunkGlobalState::Enter(Drunk* drunk) {
+}
+
+void DrunkGlobalState::Execute(Drunk* drunk) {
+
+}
+
+void DrunkGlobalState::Exit(Drunk* drunk) {
+}
+
+bool DrunkGlobalState::OnMessage(Drunk* drunk, const Telegram& msg) {
+	switch (msg.Msg) {
+	case Msg_MinerAtSaloon:
+		DisplayMessageThread::displayMessage(drunk->ID());
+
+		drunk->GetFSM()->ChangeState(DrunkFight::Instance());
+		break;
+	};
+	return true;
 }
 

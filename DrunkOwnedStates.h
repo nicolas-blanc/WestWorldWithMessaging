@@ -80,3 +80,16 @@ public:
 	virtual void Exit(Drunk* drunk);
 	virtual bool OnMessage(Drunk* agent, const Telegram& msg);
 };
+
+class DrunkGlobalState : public State <Drunk>{
+private:
+	DrunkGlobalState(){};
+	~DrunkGlobalState(){};
+public:
+	static DrunkGlobalState* Instance();
+	virtual void Enter(Drunk* drunk);
+	virtual void Execute(Drunk* drunk);
+	virtual void Exit(Drunk* drunk);
+	virtual bool OnMessage(Drunk* agent, const Telegram& msg);
+
+};

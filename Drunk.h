@@ -42,6 +42,7 @@ public:
 
 		m_stateMachine = new StateMachine<Drunk>(this);
 		m_stateMachine->SetCurrentState(DrinkABeer::Instance());
+		m_stateMachine->SetGlobalState(DrunkGlobalState::Instance());
 	};
 	~Drunk(){
 		delete m_stateMachine;
